@@ -32,7 +32,11 @@
 		<div id="user-location-div" class="info-div"> </div>
 
 		<script>
-			const chaoxing_configs = {};
+			const chaoxing_configs = {
+				"requests_headers": {
+					"User-Agent": navigator.userAgent
+				}
+			};
 
 			document.getElementById("user-agent-div").innerText = navigator.userAgent;
 
