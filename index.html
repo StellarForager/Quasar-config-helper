@@ -9,9 +9,17 @@
 
 	<body>
 		<div style="display: flex">
+			<div>Quasar-auto Configs:</div>
+			&emsp;
+			<button onclick="prompt('', JSON.stringify(QuasarAutoConfig))">Copy</button>
+		</div>
+		<div id="quasarauto-configs-div" class="info-div">{}</div>
+		<br>
+
+		<div style="display: flex">
 			<div>Chaoxing Configs:</div>
 			&emsp;
-			<button onclick="prompt('', JSON.stringify(chaoxing_configs))">Copy</button>
+			<button onclick="prompt('', JSON.stringify(ChaoxingConfig))">Copy</button>
 		</div>
 		<div id="chaoxing-configs-div" class="info-div">{}</div>
 		<br>
@@ -24,19 +32,20 @@
 		<div id="device-id-div" class="info-div"> </div>
 		<br>
 
-		<div>Device Flag:</div>
-		<div id="device-flag-div" class="info-div"> </div>
+		<div>Device Code:</div>
+		<div id="device-code-div" class="info-div"> </div>
 		<br>
 
 		<div>User Location:</div>
 		<div id="user-location-div" class="info-div"> </div>
 
 		<script>
-			const chaoxing_configs = {
-				"requests_headers": {
-					"User-Agent": navigator.userAgent
-				}
+			const ChaoxingConfig = {
+				"User-Agent": navigator.userAgent,
 			};
+            const QuasarAutoConfig = {
+                "ChaoxingConfig": ChaoxingConfig
+            };
 
 			document.getElementById("user-agent-div").innerText = navigator.userAgent;
 
@@ -44,17 +53,19 @@
 				try {
 					jsBridge.bind("CLIENT_DEVICE_ID", function(ret) {
 						document.getElementById("device-id-div").innerText = JSON.stringify(ret, null, "\t");
-						chaoxing_configs["chaoxing_device_identifier"] = ret.uuid;
-						document.getElementById("chaoxing-configs-div").innerText = JSON.stringify(chaoxing_configs, null, "\t");
+						ChaoxingConfig["DeviceId"] = ret.uuid;
+						document.getElementById("chaoxing-configs-div").innerText = JSON.stringify(ChaoxingConfig, null, "\t");
+						document.getElementById("quasarauto-configs-div").innerText = JSON.stringify(QuasarAutoConfig, null, "\t");
 					});
 					jsBridge.postNotification("CLIENT_DEVICE_ID", {});
 				} catch (err) {}
 				
 				try {
 					jsBridge.bind("CLIENT_DEVICE_FLAG", function(ret) {
-						document.getElementById("device-flag-div").innerText = JSON.stringify(ret, null, "\t");
-						chaoxing_configs["chaoxing_device_code"] = ret.flagInfo.trim().replace(/[?&]/g, "");
-						document.getElementById("chaoxing-configs-div").innerText = JSON.stringify(chaoxing_configs, null, "\t");
+						document.getElementById("device-code-div").innerText = JSON.stringify(ret, null, "\t");
+						ChaoxingConfig["DeviceCode"] = ret.flagInfo.trim().replace(/[?&]/g, "");
+						document.getElementById("chaoxing-configs-div").innerText = JSON.stringify(ChaoxingConfig, null, "\t");
+						document.getElementById("quasarauto-configs-div").innerText = JSON.stringify(QuasarAutoConfig, null, "\t");
 					});
 					jsBridge.postNotification("CLIENT_DEVICE_FLAG", {});
 				} catch (err) {}
